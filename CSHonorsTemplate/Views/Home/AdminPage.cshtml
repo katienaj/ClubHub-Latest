@@ -1,0 +1,96 @@
+﻿@model CSHonorsTemplate.Models.AdminPageViewModel
+
+@{
+    ViewData["Title"] = "Admin Page";
+}
+
+<h1>Admin Page</h1>
+
+<hr />
+
+<h2>Club Types</h2>
+<p>
+    <a asp-controller="ClubTypes" asp-action="Create">Create New Club Type</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ClubTypes)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-controller="ClubTypes" asp-action="Edit" asp-route-id="@item.ClubTypeId">Edit</a> |
+                    <a asp-controller="ClubTypes" asp-action="Delete" asp-route-id="@item.ClubTypeId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h2>Clubs</h2>
+<p>
+    <a asp-controller="Clubs" asp-action="Create">Create New Club</a>
+</p>
+
+<h5>Active Clubs</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Clubs.Where(c => c.isActive))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-controller="Clubs" asp-action="Edit" asp-route-id="@item.ClubId">Edit</a> |
+                    <a asp-controller="Clubs" asp-action="Details" asp-route-id="@item.ClubId">Details</a> |
+                    <a asp-controller="Clubs" asp-action="Delete" asp-route-id="@item.ClubId">Delete</a> |
+                    <a asp-controller="Clubs" asp-action="Disable" asp-route-id="@item.ClubId">Disable</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<h5>Inactive Clubs</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Clubs.Where(c => !c.isActive))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-controller="Clubs" asp-action="Edit" asp-route-id="@item.ClubId">Edit</a> |
+                    <a asp-controller="Clubs" asp-action="Details" asp-route-id="@item.ClubId">Details</a> |
+                    <a asp-controller="Clubs" asp-action="Delete" asp-route-id="@item.ClubId">Delete</a> |
+                    <a asp-controller="Clubs" asp-action="Enable" asp-route-id="@item.ClubId">Enable</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CSHonorsTemplate.Models.Club>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/club-details.css" asp-append-version="true" />
+}
+
+<h1></h1>
+
+<form asp-controller="Clubs" asp-action="Index" method="get">
+    <div class="row align-items-end mb-3 mt-3">
+        <div class="col-md-3">
+            <label class="form-label">Club Type</label>
+            <select name="clubTypeFilter" asp-items="ViewBag.ClubTypes" class="form-select">
+                <option value="">All Types</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Meeting Day</label>
+            <select name="meetingDayFilter" asp-items="ViewBag.MeetingDays" class="form-select">
+                <option value="">Any Day</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Club Name</label>
+            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search by name..." />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+<hr/>
+
+<h2>Clubs</h2>
+    <div class="row">
+    @foreach (var item in Model.Where(c => c.isActive))
+    {
+            <div class="col-md-3 mb-4">
+                <div class="card" style="position: relative;">
+                <img src="@Url.Content($"~/images/{item.Image}")" class="card-img-top" alt="@item.Name" style="aspect-ratio: 1 / 1; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@(item.ClubType?.Name ?? "No Type")</p>
+                        <a asp-action="Details" asp-route-id="@item.ClubId" class="stretched-link" aria-label="View detail page for club"></a>
+                    </div>
+                </div>
+            </div>
+    }
+    </div>
+
+    <div>
+        @if (ViewBag.isSiteAdmin)
+        {
+            <h2>Inactive Clubs</h2>
+            @foreach (var item in Model.Where(c => !c.isActive))
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card" style="position: relative;">
+                        <img src="~/images/@item.Image" class="card-img-top" alt="@item.Name" style="aspect-ratio: 1 / 1; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@(item.ClubType?.Name ?? "No Type")</p>
+                            <a asp-action="Details" asp-route-id="@item.ClubId" class="stretched-link" aria-label="View detail page for club"></a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+</div>
+
+
+<div>
+    @section Scripts {
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function () {
+
+            });
+        </script>
+    }
+</div>

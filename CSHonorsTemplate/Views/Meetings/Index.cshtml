@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CSHonorsTemplate.Models.Meeting>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MeetingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Agenda)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Club)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Agenda)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Club.ClubId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MeetingId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MeetingId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MeetingId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

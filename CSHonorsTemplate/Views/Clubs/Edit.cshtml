@@ -1,0 +1,80 @@
+﻿@model CSHonorsTemplate.Models.Club
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Club</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-route-id="@Model.ClubId" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ClubId" />
+            <input type="hidden" asp-for="Image" />
+            <div class="form-group">
+                <label class="control-label">Current Image</label>
+                <div>
+                    <img src="~/images/@Model.Image" alt="Current Image" style="max-width: 200px; max-height: 200px;" class="mb-2" />
+                </div>
+                <label asp-for="Image" class="control-label">Upload New Image</label>
+                <input name="imageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VeracrossId" class="control-label"></label>
+                <input asp-for="VeracrossId" type="number" step="1" class="form-control" />
+                <span asp-validation-for="VeracrossId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="ClubTypeId" class="control-label">Club Type</label>
+                <select asp-for="ClubTypeId" name="ClubTypeId" asp-items="ViewBag.ClubTypes" class="form-select me-2">
+                    <option selected disabled>-- Select club type --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingDay" class="control-label"></label>
+                <select asp-for="MeetingDay" class="form-control" asp-items="Html.GetEnumSelectList<Days>()"></select>
+                <span asp-validation-for="MeetingDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingTime" class="control-label"></label>
+                <input asp-for="MeetingTime" type="time" class="form-control" />
+                <span asp-validation-for="MeetingTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingFrequency" class="control-label"></label>
+                <select asp-for="MeetingFrequency" class="form-control" asp-items="Html.GetEnumSelectList<Frequency>()"></select>
+                <span asp-validation-for="MeetingFrequency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingLocation" class="control-label"></label>
+                <input asp-for="MeetingLocation" class="form-control" />
+                <span asp-validation-for="MeetingLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

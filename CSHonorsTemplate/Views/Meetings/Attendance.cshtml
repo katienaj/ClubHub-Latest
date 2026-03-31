@@ -1,0 +1,85 @@
+﻿@model CSHonorsTemplate.Models.Meeting
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/club-details.css" asp-append-version="true" />
+}
+
+<h1>Take Attendance</h1>
+
+<h4>For: @Model.Club.Name, @Model.MeetingDate</h4>
+
+<h6 class="mt-4">Member/s</h6>
+
+<div class="d-flex flex-wrap">
+    @foreach (var item in Model.Attendances)
+    {
+        <div class="club-person-card mb-3">
+            <div class="club-person-card-body d-flex justify-content-between align-items-center">
+                <p class="card-title mb-0">@item.Person.FullName</p>
+                <div class="d-flex">
+                    <form asp-action="#" method="post" class="ms-2">
+                        <input type="hidden" name="AttendanceId" value="@item.AttendanceId" />
+                        <input type="hidden" name="isPresent" value="@item.isPresent" />
+                        <button type="button" class="btn @(item.isPresent ? "btn-success" : "btn-primary") btn-toggle-present">
+                            @(item.isPresent ? "Present" : "Not Present")
+                        </button>
+                    </form>
+                    
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    <p>
+        Attendance is automatically saved. You can always come back later to change it as well!
+        <a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.ClubId">Back to Club</a> 
+    </p>
+</div>
+
+<div>
+    @section Scripts {
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            
+            $(document).ready(function () {
+                $('.btn-toggle-present').click(function () {
+                    var button = $(this);
+                    var form = button.closest('form');
+                    var attendanceId = form.find('input[name="AttendanceId"]').val();
+                    var isPresentInput = form.find('input[name="isPresent"]');
+                    var currentIsPresent = isPresentInput.val().toLowerCase() === 'true';
+                    var newIsPresent = !currentIsPresent;
+
+                    $.ajax({
+                        url: '@Url.Action("ToggleAttendance", "Meetings")',
+                        type: 'POST',
+                        data: {
+                            attendanceId: attendanceId,
+                            isPresent: newIsPresent
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                isPresentInput.val(newIsPresent.toString());
+                                if (newIsPresent) {
+                                    button.text('Present').removeClass('btn-primary').addClass('btn-success');
+                                } else {
+                                    button.text('Not Present').removeClass('btn-success').addClass('btn-primary');
+                                }
+                            } else {
+                                console.error("Failed to update attendance: " + response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX error:", status, error);
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+</div>

@@ -1,0 +1,88 @@
+﻿@model CSHonorsTemplate.Models.Club
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Club</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input name="imageFile" type="file" class="form-control" accept="image/*"/>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VeracrossId" class="control-label"></label>
+                <input asp-for="VeracrossId" type="number" step="1" class="form-control" />
+                <span asp-validation-for="VeracrossId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="club-type-select" class="control-label">Club Type</label>
+                <select id="club-type-select" name="ClubTypeId" asp-items="ViewBag.ClubTypes" class="form-select me-2">
+                    <option selected disabled>-- Select club type --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="add-sponsor-select" class="control-label">Adult Sponsor</label>
+                <select id="add-sponsor-select" name="SelectedSponsor" asp-items="ViewBag.Employees" class="form-select me-2">
+                    <option selected disabled>-- Select a person to add --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingDay" class="control-label"></label>
+                <select asp-for="MeetingDay" class="form-control" asp-items="Html.GetEnumSelectList<Days>()"></select>
+                <span asp-validation-for="MeetingDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingTime" class="control-label"></label>
+                <input asp-for="MeetingTime" type="time" class="form-control" />
+                <span asp-validation-for="MeetingTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingFrequency" class="control-label"></label>
+                <select asp-for="MeetingFrequency" class="form-control" asp-items="Html.GetEnumSelectList<Frequency>()"></select>
+                <span asp-validation-for="MeetingFrequency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingLocation" class="control-label"></label>
+                <input asp-for="MeetingLocation" class="form-control" />
+                <span asp-validation-for="MeetingLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#add-sponsor-select').select2();
+        });
+    </script>
+}

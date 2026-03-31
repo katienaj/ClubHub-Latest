@@ -1,0 +1,39 @@
+﻿@model CSHonorsTemplate.Models.Meeting
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Meeting</h1>
+
+<h4>For: @Model.Club.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ClubId" />
+            <div class="form-group">
+                <label asp-for="MeetingDate" class="control-label"></label>
+                <input asp-for="MeetingDate" class="form-control" />
+                <span asp-validation-for="MeetingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Agenda" class="control-label"></label>
+                <input asp-for="Agenda" class="form-control" />
+                <span asp-validation-for="Agenda" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

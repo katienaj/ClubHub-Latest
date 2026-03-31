@@ -1,0 +1,54 @@
+@model IEnumerable<CSHonorsTemplate.Models.Person>
+@{
+    var userPermissions = ViewBag.UserPermissions as List<CSHonorsTemplate.Models.UserPermission>;
+}
+
+<h2>Manage Admins</h2>
+<table class="table" id="adminsTable">
+    <thead>
+        <tr>
+            <th>CampusId</th>
+            <th>Name</th>
+            <th>Is Admin</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var person in Model)
+    {
+        var isAdmin = userPermissions.Any(up => up.PersonId == person.PersonId && up.IsAdmin);
+        <tr>
+            <td>@person.PersonId</td>
+            <td>@person.LastName, @person.PreferredName</td>
+            <td>@(isAdmin ? "Yes" : "No")</td>
+            <td>
+                @if (!isAdmin)
+                {
+                    <form asp-action="AddAdmin" method="post" style="display:inline;">
+                        <input type="hidden" name="campusId" value="@person.PersonId" />
+                        <button type="submit" class="btn btn-primary">Add as Admin</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="RemoveAdmin" method="post" style="display:inline;">
+                        <input type="hidden" name="campusId" value="@person.PersonId" />
+                        <button type="submit" class="btn btn-danger">Remove Admin</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#adminsTable').DataTable({
+                "order": [[1, "asc"]],
+                "searching": true
+            });
+        });
+    </script>
+}

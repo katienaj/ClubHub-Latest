@@ -1,0 +1,57 @@
+﻿@model CSHonorsTemplate.Models.UserInfo
+@using System.Security.Claims
+
+<h2>User Information</h2>
+<p>All information of the current logged in user.</p>
+<table class="table table-bordered">
+    <tr>
+        <th>Property</th>
+        <th>Value</th>
+    </tr>
+    <tr>
+        <td>isAdmin</td>
+        <td>@Model.isAdmin</td>
+    </tr>
+    <tr>
+        <td>isStudent</td>
+        <td>@Model.isStudent</td>
+    </tr>
+    <tr>
+        <td>isEmployee</td>
+        <td>@Model.isEmployee</td>
+    </tr>
+    @if (Model.person != null)
+    {
+        <tr>
+            <td>Person.CampusId</td>
+            <td>@Model.person.PersonId</td>
+        </tr>
+        <tr>
+            <td>Person.LastName</td>
+            <td>@Model.person.LastName</td>
+        </tr>
+        <tr>
+            <td>Person.PreferredName</td>
+            <td>@Model.person.PreferredName</td>
+        </tr>
+        <tr>
+            <td>Person.PersonType</td>
+            <td>@Model.person.PersonType</td>
+        </tr>
+    }
+</table>
+
+<table class="table-hover table-condensed table-striped">
+    <tr>
+        <th>Claim Type</th>
+        <th>Claim Value</th>
+    </tr>
+
+    @foreach (Claim claim in User.Claims)
+    {
+        <tr>
+            <td>@claim.Type</td>
+            <td>@claim.Value</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,344 @@
+﻿@model CSHonorsTemplate.Models.ClubDetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/club-details.css" asp-append-version="true" />
+}
+
+<div class="d-flex justify-content-center mb-3">
+    <div class="club-image-container">
+        <img src="~/images/@Model.Club.Image" alt="@Model.Club.Name" class="rounded club-image">
+    </div>
+</div>
+<h1 class="text-center">@Model.Club.Name</h1>
+
+
+
+<div>
+
+    <ul class="nav nav-tabs" id="club-tabs">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" data-bs-toggle="tab" href="#info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#members">Members</a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#attendance">Meetings and Attendance</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Posts</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div class="tab-pane fade" id="info" role="tabpanel">
+
+            <dl class="row">
+                <dt class="col-sm-2 mt-3">
+                    @Html.DisplayNameFor(model => model.Club.Description)
+                </dt>
+                <dd class="col-sm-10 mt-3 mb-3">
+                    @Html.DisplayFor(model => model.Club.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Club.ClubType)
+                </dt>
+                <dd class="col-sm-10 mb-3">
+                    @Html.DisplayFor(model => model.Club.ClubType.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Club.MeetingDay)
+                </dt>
+                <dd class="col-sm-10 mb-3">
+                    @Html.DisplayFor(model => model.Club.MeetingDay)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Club.MeetingTime)
+                </dt>
+                <dd class="col-sm-10 mb-3">
+                    @(Model.Club.MeetingTime.HasValue ? (new DateTime() + Model.Club.MeetingTime.Value).ToString("h:mm tt") : "")
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Club.MeetingFrequency)
+                </dt>
+                <dd class="col-sm-10 mb-3">
+                    @Html.DisplayFor(model => model.Club.MeetingFrequency)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Club.MeetingLocation)
+                </dt>
+                <dd class="col-sm-10 mb-3">
+                    @Html.DisplayFor(model => model.Club.MeetingLocation)
+                </dd>
+
+            </dl>
+
+            @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+            {
+                <a asp-action="Edit" asp-route-id="@Model?.Club.ClubId" class="btn btn-primary">Edit</a>
+            }
+        </div>
+
+        <div class="tab-pane fade" id="members" role="tabpanel">
+            <div>
+                @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                {
+                    <form asp-action="JoinClub" method="post">
+                        <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                        <select id="add-interested-select" name="PersonId" asp-items="Model.NonClubMembers" class="form-select me-2">
+                            <option selected disabled>-- Add someone Interested! --</option>
+                        </select>
+                        <input type="hidden" name="activeTab" value="members" />
+                        <button type="submit" class="btn btn-primary mt-3 mb-3">Add Interested</button>
+                    </form>
+                }
+            </div>
+
+            <div>
+                @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                {
+                    <form asp-action="AddAdvisor" method="post">
+                        <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                        <select id="add-advisor-select" name="PersonId" asp-items="Model.Employees" class="form-select me-2">
+                            <option selected disabled>-- Add an Advisor! --</option>
+                        </select>
+                        <input type="hidden" name="activeTab" value="members" />
+                        <button type="submit" class="btn btn-primary mb-3">Add Advisor</button>
+                    </form>
+                }
+            </div>
+
+            <!-- Advisors -->
+            <h6 class="mt-4">Advisor/s</h6>
+            <div class="d-flex flex-wrap">
+                @foreach (var item in Model.Club.Joins.Where(Join => Join.Role == Role.Advisor))
+                {
+                    <div class="club-person-card mb-3">
+                        <div class="club-person-card-body d-flex justify-content-between align-items-center">
+                            <p class="card-title mb-0">@item.Person.FullName</p>
+                            <div class="d-flex">
+                                @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                                {
+                                    <form asp-action="RemoveUserFromClub" method="post" class="ms-2">
+                                        <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                                        <input type="hidden" name="PersonId" value="@item.PersonId" />
+                                        <input type="hidden" name="activeTab" value="members" />
+                                        <button type="submit" class="btn btn-primary">Remove</button>
+                                    </form>
+                                }
+                            </div>
+                            
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Leaders -->
+            <h6 class="mt-4">Leader/s</h6>
+            <div class="d-flex flex-wrap">
+                @foreach (var item in Model.Club.Joins.Where(Join => Join.Role == Role.Leader))
+                {
+                    <div class="club-person-card mb-3">
+                        <div class="club-person-card-body d-flex justify-content-between align-items-center">
+                            <p class="card-text mb-0">@item.Person.FullName</p>
+                            <div class="d-flex">
+                                @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                                {
+                                    <form asp-action="RemoveUserFromClub" method="post" class="ms-2">
+                                        <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                                        <input type="hidden" name="PersonId" value="@item.PersonId" />
+                                        <input type="hidden" name="activeTab" value="members" />
+                                        <button type="submit" class="btn btn-primary">Remove</button>
+                                    </form>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            @if (Model.Club.ShowMembers || Model.IsClubAdmin || Model.IsSiteAdmin)
+            {
+                <!-- Members -->
+                <h6 class="mt-4">Member/s</h6>
+                <div class="d-flex flex-wrap">
+                    @foreach (var item in Model.Club.Joins.Where(Join => Join.Role == Role.Member))
+                    {
+                        <div class="club-person-card mb-3">
+                            <div class="club-person-card-body d-flex justify-content-between align-items-center">
+                                <p class="card-title mb-0">@item.Person.FullName</p>
+                                <div class="d-flex">
+                                    @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                                    {
+                                        <form asp-action="AddLeader" method="post">
+                                            <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                                            <input type="hidden" name="PersonId" value="@item.PersonId" />
+                                            <input type="hidden" name="activeTab" value="members" />
+                                            <button type="submit" class="btn btn-primary">Add Leader</button>
+                                        </form>
+                                        <form asp-action="RemoveUserFromClub" method="post" class="ms-2">
+                                            <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                                            <input type="hidden" name="PersonId" value="@item.PersonId" />
+                                            <input type="hidden" name="activeTab" value="members" />
+                                            <button type="submit" class="btn btn-primary">Remove</button>
+                                        </form>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+            {
+                @if (Model.Club.ShowMembers)
+                {
+                    <form asp-action="HideMemberList" method="post">
+                        <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                        <input type="hidden" name="activeTab" value="members" />
+                        <button type="submit" class="btn btn-danger">Hide Member List</button>
+                    </form>
+                }
+                else
+                {
+                    <p>The member list is hidden to the public.</p>
+                    <form asp-action="ShowMemberList" method="post">
+                        <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                        <input type="hidden" name="activeTab" value="members" />
+                        <button type="submit" class="btn btn-primary">Show Member List</button>
+                    </form>
+                }
+            }
+
+            @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+            {
+                <!-- Interested -->
+                <h6 class="mt-4">Interested/s</h6>
+                <div class="d-flex flex-wrap">
+                    @foreach (var item in Model.Club.Joins.Where(Join => Join.Role == null))
+                    {
+                        <div class="club-person-card mb-3">
+                            <div class="club-person-card-body d-flex justify-content-between align-items-center">
+                                <p class="card-title mb-0">@item.Person.FullName</p>
+                                <div class="d-flex">
+                                    @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                                    {
+                                        <form asp-action="ApproveMember" method="post">
+                                            <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                                            <input type="hidden" name="PersonId" value="@item.PersonId" />
+                                            <input type="hidden" name="activeTab" value="members" />
+                                            <button type="submit" class="btn btn-primary">Approve Member</button>
+                                        </form>
+                                        <form asp-action="RemoveUserFromClub" method="post" class="ms-2">
+                                            <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+                                            <input type="hidden" name="PersonId" value="@item.PersonId" />
+                                            <input type="hidden" name="activeTab" value="members" />
+                                            <button type="submit" class="btn btn-primary">Remove</button>
+                                        </form>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+           
+         
+
+        </div>
+        <div class="tab-pane fade" id="attendance" role="tabpanel">
+            @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+            {
+                <a asp-controller="Meetings" asp-action="Create" asp-route-clubId="@Model.Club.ClubId" class="btn btn-primary mt-3 mb-3">Create a meeting</a>
+            }
+            <div>
+                 @foreach (var item in Model.Club.Meetings)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.MeetingDate.ToString("MMMM dd, yyyy, h:mm tt")</h5>
+                            <p class="card-text">@item.Agenda</p>
+                            @if (Model.IsClubAdmin || Model.IsSiteAdmin)
+                            {
+                                <a asp-controller="Meetings" asp-action="Attendance" asp-route-id="@item.MeetingId" class="btn btn-primary ms-2 mb-3">Attendace</a>
+                                <form asp-controller="Meetings" asp-action="DeleteMeeting" method="post" class="ms-2">
+                                    <input type="hidden" name="meetingId" value="@item.MeetingId" />
+                                    <input type="hidden" name="activeTab" value="attendance" />
+                                    <button type="submit" class="btn btn-primary ">Delete Meeting</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+               
+             </div>
+            
+        </div>
+
+
+    <hr /> 
+    
+</div>
+</div>
+
+<div>
+    @if (!Model.HasJoined && Model.CurrentPersonId > 0)
+    {
+        <form asp-action="JoinClub" method="post">
+            <input type="hidden" name="ClubId" value="@Model.Club.ClubId" />
+            <input type="hidden" name="PersonId" value="@Model.CurrentPersonId" />
+            <button type="submit" class="btn btn-primary">I'm Interested</button>
+        </form>
+    }
+    else if (Model.HasJoined)
+    {
+        <p>You have registered with this club.</p>
+    }
+    
+    @if (TempData["Message"] != null)
+    {
+    <div class="alert alert-warning">
+        @TempData["Message"]
+    </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+    </div>
+    }
+
+    
+</div>
+<div>
+    @section Scripts {
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#add-interested-select').select2();
+                $('#add-leader-select').select2();
+                $('#add-advisor-select').select2();
+
+                var activeTab = '@(ViewBag.ActiveTab ?? "info")';
+                $('#club-tabs a[href="#' + activeTab + '"]').addClass('active');
+                $('#' + activeTab).addClass('show active');
+
+
+            });
+        </script>
+    }
+</div>
