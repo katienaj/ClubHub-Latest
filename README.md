@@ -1,12 +1,15 @@
 ## Project Overview: Culver Clubhub
-Culver ClubHub is a full‑stack web application built to manage all student clubs at my school. Before the app was created, people used spreadsheets, emails and manual tracking. Using external platforms raised cost and data‑privacy concerns. This app provides an internal, secure, school‑hosted solution that will be used by 800+ students and 40+ faculty members.
+Culver ClubHub is a full‑stack web application built to manage all student clubs at my school. Before the app was created, people used spreadsheets, emails and manual tracking. Using external platforms raised cost and data‑privacy concerns. This app provides an internal, secure, school‑hosted solution that will be used by 800+ students and 40+ faculty members. 
 
 ## About This Repository (Sanitized for sharing)
 This repo is not runnable! The original repository is owned by my school and contains sensitive internal data. Additionally, my school GitHub account will be deactivated after graduation, so an IT administrator helped me create this public version owned by my personal account with all sensitive data removed. As a result, the commit history is not included in this public clone. I have attached screenshots of the original commits at the end of the readme.
 
 ## My Role
-I designed, planned and developed the application over 5 months (1 semester), with occasional debugging help and requirements document. 
->finalization.CSHonorsTemplate/Documentation/ClubHub Requirements.docx
+I identified requirements, designed, [planned](CSHonorsTemplate/Documentation/ClubhubPlanningDoc.pdf) and developed the application over 5 months (1 semester). 
+
+You can view the official requirements document here: [ClubHub Requirements Document](CSHonorsTemplate/Documentation/ClubHub%20Requirements.docx)
+
+Special thanks to [@easterro](https://github.com/easterro) for mentoring me and sanitizing, as well as [@TylerJohnson7801](https://github.com/TylerJohnson7801) for helping to deploy the site!
 
 ## Key Features
 This is a fully functional production system, including:
