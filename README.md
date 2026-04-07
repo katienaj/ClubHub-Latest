@@ -7,7 +7,7 @@ This repo is not runnable! The original repository is owned by my school and con
 ## My Role
 I identified requirements, designed, [planned](CSHonorsTemplate/Documentation/ClubhubPlanningDoc.pdf) and developed the application over 5 months (1 semester). 
 
-You can view the official requirements document here: [ClubHub Requirements Document](CSHonorsTemplate/Documentation/ClubHub%20Requirements.docx)
+You can view the official requirements document here: [ClubHub Requirements Document](CSHonorsTemplate/Documentation/ClubHubRequirements.md)
 
 Special thanks to [@easterro](https://github.com/easterro) for mentoring me and sanitizing, as well as [@TylerJohnson7801](https://github.com/TylerJohnson7801) for helping to deploy the site!
 
